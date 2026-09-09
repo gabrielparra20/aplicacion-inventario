@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Materia Prima</title>
+    <!-- Incluye aquí tu CSS si tienes alguno -->
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            box-sizing: border-box;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        form p {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        input[type="submit"], button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover, button:hover {
+            background-color: #0056b3;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .cancel-button {
+            background-color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Registrar Materia Prima</h2>
+        <!-- El método POST es crucial para enviar datos del formulario -->
+        <form method="post">
+            {% csrf_token %}
+            <!-- Esto renderiza el formulario completo con etiquetas de párrafo -->
+            {{ form.as_p }}
+            <div class="button-group">
+                <input type="submit" value="Guardar">
+                <button type="button" class="cancel-button" onclick="window.history.back()">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

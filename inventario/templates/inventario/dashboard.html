@@ -1,0 +1,148 @@
+{% extends 'inventario/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard de Gestión{% endblock %}
+
+{% block content %}
+<div class="p-8 md:p-12 lg:p-16 bg-gray-100 min-h-screen">
+    <div class="max-w-7xl mx-auto">
+        <!-- Dashboard Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <!-- Card Materias Primas Pendientes -->
+            <div class="bg-yellow-500 text-white rounded-2xl p-6 shadow-lg transform hover:scale-105 transition-transform duration-300 flex flex-col justify-between">
+                <div>
+                    <h2 class="text-xl font-semibold mb-2">Materias Primas</h2>
+                    <p class="text-yellow-100 text-3xl font-bold">{{ total_materias_primas }}</p>
+                </div>
+                <div class="text-right text-sm mt-2">
+                    <p>{{ materias_primas_pendientes }} Pendientes</p>
+                    <p>{{ materias_primas_aprobadas }} Aprobadas</p>
+                    <p>{{ materias_primas_terminadas }} Terminadas</p>
+                </div>
+            </div>
+            <!-- Card Materia Prima -->
+            <div class="bg-blue-600 text-white rounded-2xl p-6 shadow-lg transform hover:scale-105 transition-transform duration-300 flex flex-col justify-between">
+                <div>
+                    <h2 class="text-2xl font-semibold mb-2">Registrar Materia Prima</h2>
+                    <p class="text-blue-200">Añade nuevos insumos al inventario de manera sencilla.</p>
+                </div>
+                <a href="{% url 'registrar_materia_prima' %}" class="self-end mt-4">
+                    <button class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300 shadow-md">
+                        <i class="fas fa-plus mr-2"></i> Registrar
+                    </button>
+                </a>
+            </div>
+            <!-- Card Producto Terminado -->
+            <div class="bg-green-600 text-white rounded-2xl p-6 shadow-lg transform hover:scale-105 transition-transform duration-300 flex flex-col justify-between">
+                <div>
+                    <h2 class="text-2xl font-semibold mb-2">Registrar Producto Terminado</h2>
+                    <p class="text-green-200">Registra un producto final listo para la venta.</p>
+                </div>
+                <a href="{% url 'registrar_producto_terminado' %}" class="self-end mt-4">
+                    <button class="bg-green-700 hover:bg-green-800 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300 shadow-md">
+                        <i class="fas fa-plus mr-2"></i> Registrar
+                    </button>
+                </a>
+            </div>
+            <!-- Card Salida de Producto -->
+            <div class="bg-red-500 text-white rounded-2xl p-6 shadow-lg transform hover:scale-105 transition-transform duration-300">
+                <h2 class="text-2xl font-semibold mb-2">Salida de Producto</h2>
+                <p class="text-red-200">Registra la salida de un producto terminado del inventario.</p>
+                <!-- Nuevo botón para la salida de productos -->
+                <a href="{% url 'salida_producto' %}" class="block bg-red-600 text-white font-bold py-4 px-6 rounded-lg shadow-md hover:bg-red-700 transition duration-300">
+                Registrar Salida de Producto
+            </a>
+            </div>
+        </div>
+        
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    
+    <a href="{% url 'listar_material_envase' %}" class="block p-6 bg-white rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105">
+        <div class="flex items-center">
+            <svg class="w-10 h-10 text-yellow-500 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
+            <div>
+                <p class="text-sm font-medium text-gray-500">Materiales de Envase</p>
+                <p class="text-3xl font-bold text-gray-900">{{ total_material_envase }}</p>
+            </div>
+        </div>
+        <p class="mt-4 text-xs text-yellow-600 font-semibold text-center">Ver Inventario Completo &rarr;</p>
+    </a>
+</div>
+        <!-- Tablas de Inventario -->
+        <div class="bg-white rounded-2xl p-8 shadow-2xl">
+            <h2 class="text-3xl font-extrabold text-gray-800 mb-6">Inventario en General</h2>
+            
+            <!-- Últimas Materias Primas -->
+      <h3 class="text-2xl font-bold text-gray-700 mb-4">Últimas Materias Primas</h3>
+<div class="overflow-x-auto">
+    <table class="min-w-full bg-white rounded-lg shadow overflow-hidden">
+        <thead class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+            <tr>
+                <th class="py-3 px-6 text-left">Código</th>
+                <th class="py-3 px-6 text-left">Nombre</th>
+                <th class="py-3 px-6 text-left">Unidad de Medida</th>
+                <th class="py-3 px-6 text-left">cantidad</th>
+                <th class="py-3 px-6 text-left">lote</th>
+                <th class="py-3 px-6 text-left">Estado</th>
+                <th class="py-3 px-6 text-center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody class="text-gray-600 text-sm font-light">
+            {% for materia in materias_primas %}
+            <tr class="border-b border-gray-200 hover:bg-gray-100">
+                <td class="py-3 px-6 text-left whitespace-nowrap">{{ materia.codigo }}</td>
+                <td class="py-3 px-6 text-left">{{ materia.nombre }}</td>
+                <td class="py-3 px-6 text-left">{{ materia.unidad_medida }}</td>
+                <td class="py-3 px-6 text-left">{{ materia.cantidad }}</td>
+                <td class="py-3 px-6 text-left">{{ materia.lote }}</td>
+                <td class="py-3 px-6 text-left">{{ materia.estado }}</td>
+                <td class="py-3 px-6 text-center">
+                    <a href="{% url 'editar_materia_prima' materia.pk %}" class="text-blue-500 hover:underline mx-1">Editar</a>
+                    <a href="{% url 'eliminar_materia_prima' materia.pk %}" class="text-red-500 hover:underline mx-1">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="py-4 text-center text-gray-500">No hay materias primas registradas.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+            <!-- Últimos Productos Terminados -->
+            <h3 class="text-2xl font-bold text-gray-700 mb-4 mt-8">Últimos Productos Terminados</h3>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white rounded-lg shadow overflow-hidden">
+                    <thead class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                        <tr>
+                            <th class="py-3 px-6 text-left">Código</th>
+                            <th class="py-3 px-6 text-left">Nombre</th>
+                            <th class="py-3 px-6 text-center">unidad de medida</th>
+                            <th class="py-3 px-6 text-center">lote</th>
+                            <th class="py-3 px-6 text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-600 text-sm font-light">
+                        {% for producto in productos_terminados %}
+                        <tr class="border-b border-gray-200 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left whitespace-nowrap">{{ producto.codigo }}</td>
+                            <td class="py-3 px-6 text-left">{{ producto.nombre }}</td>
+                            <td class="py-3 px-6 text-left">{{ producto.unidad_medida}}</td>
+                            <td class="py-3 px-6 text-left">{{ producto.lote}}</td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="{% url 'producto_terminado_edit' producto.pk %}" class="text-blue-500 hover:underline mx-1">Editar</a>
+                                <a href="{% url 'producto_terminado_confirm_delete' producto.pk %}" class="text-red-500 hover:underline mx-1">Eliminar</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="py-4 text-center text-gray-500">No hay productos terminados registrados.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

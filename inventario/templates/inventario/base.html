@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Inventario{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Usamos la fuente Inter para un look moderno */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+    
+    <header class="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-10">
+        <h1 class="text-2xl font-bold text-gray-800">Sistema de Inventario</h1>
+<nav>
+
+        {% if user.is_authenticated %}
+        <a href="{% url 'listar_material_envase' %}" class="text-blue-600 hover:text-blue-800 font-semibold mx-2 transition-colors duration-200">
+            Listar Materiales
+        </a>
+            <a href="{% url 'dashboard' %}" class="text-blue-600 hover:text-blue-800 font-semibold mx-2 transition-colors duration-200">Inicio</a>
+            <a href="{% url 'registrar_producto_terminado' %}" class="text-blue-600 hover:text-blue-800 font-semibold mx-2 transition-colors duration-200">Reg. Producto Terminado</a>
+            <a href="{% url 'productos_pendientes' %}" class="text-blue-600 hover:text-blue-800 font-semibold mx-2 transition-colors duration-200">Pendientes</a>
+            
+            <a href="{% url 'logout' %}" class="bg-red-500 text-white font-semibold py-1 px-3 rounded-xl hover:bg-red-600 transition-colors duration-200 ml-4">
+                Cerrar Sesión ({{ user.username }})
+            </a>
+        {% else %}
+            <a href="{% url 'login' %}" class="bg-green-500 text-white font-semibold py-1 px-3 rounded-xl hover:bg-green-600 transition-colors duration-200 ml-4">
+                Iniciar Sesión
+            </a>
+        {% endif %}
+    </nav>
+    </header>
+
+    <main class="container mx-auto mt-8 p-4">
+        <!-- Manejo de mensajes de Django -->
+        {% if messages %}
+        <div class="mb-4">
+            {% for message in messages %}
+                <div class="p-3 rounded-xl shadow-md text-sm {% if message.tags == 'success' %}bg-green-100 text-green-800 border-l-4 border-green-500{% elif message.tags == 'error' %}bg-red-100 text-red-800 border-l-4 border-red-500{% else %}bg-blue-100 text-blue-800 border-l-4 border-blue-500{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        {% block content %}
+        <!-- El contenido específico de cada página se inserta aquí -->
+        {% endblock %}
+    </main>
+
+    <footer class="text-center p-4 mt-8 text-gray-600">
+        <p>&copy; 2024 Mi Sistema de Inventario. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

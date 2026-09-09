@@ -1,0 +1,103 @@
+{% extends 'inventario/base.html' %}
+{% load static %}
+
+{% block title %}Salida de Producto{% endblock %}
+
+{% block content %}
+<div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+    <div class="w-full max-w-md bg-white p-8 rounded-xl shadow-2xl transition duration-500 hover:shadow-2xl">
+        <h2 class="text-2xl font-bold text-center mb-6 text-red-600">Salida de Producto Terminado</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="mb-4 p-3 rounded-lg text-sm {% if message.tags == 'success' %}bg-green-100 text-green-700{% elif message.tags == 'error' %}bg-red-100 text-red-700{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            <!-- Producto (Selector) -->
+            <div class="mb-4">
+                <label for="{{ form.producto.id_for_label }}" class="block text-sm font-medium text-gray-700">Producto</label>
+                {{ form.producto }}
+                {% for error in form.producto.errors %}
+                    <p class="text-xs text-red-500 mt-1">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <!-- Cantidad -->
+            <div class="mb-6">
+                <label for="{{ form.cantidad.id_for_label }}" class="block text-sm font-medium text-gray-700">Cantidad</label>
+                {{ form.cantidad }}
+                {% for error in form.cantidad.errors %}
+                    <p class="text-xs text-red-500 mt-1">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-md">
+                Registrar Salida
+            </button>
+        </form>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'dashboard' %}" class="text-sm text-gray-500 hover:text-red-600 transition duration-300">Volver al Inicio</a>
+        </div>
+    </div>
+
+    <!-- TABLA DE INVENTARIO DE PRODUCTOS TERMINADOS (PARA REFERENCIA) -->
+    <div class="w-full max-w-3xl bg-white p-6 mt-8 rounded-xl shadow-lg">
+        <h3 class="text-xl font-semibold text-center mb-4 text-gray-800">Inventario de Productos Terminados</h3>
+        
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            NOMBRE
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            DESCRIPCIÓN
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            STOCK
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            ESTADO
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <!-- Iteramos sobre los productos que se pasan desde la vista (productos) -->
+                    {% for producto in productos %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            {{ producto.nombre }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ producto.descripcion }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <!-- AQUI ESTÁ LA CANTIDAD DE STOCK REAL -->
+                            <span class="font-bold {% if producto.cantidad < 10 %}text-red-500{% else %}text-green-600{% endif %}">
+                                {{ producto.cantidad }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ producto.get_estado_display }}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">
+                            No hay productos terminados registrados.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
