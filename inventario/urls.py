@@ -3,6 +3,8 @@ from . import views
 
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
+    #login  registrar usuario
+    path('accounts/registro/', views.registro_view, name='registro'),
     #login iniciar sesion 
     path('accounts/login/', views.login_view, name='login'), # Usaremos esta vista custom
     path('logout/', views.logout_view, name='logout'),

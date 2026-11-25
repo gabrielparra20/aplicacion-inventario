@@ -7,6 +7,29 @@ from django.db.models import Sum
 from django.contrib.auth.forms import AuthenticationForm # Importamos el formulario de login de Django
 from django.contrib.auth.decorators import login_required # Para proteger vistas
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+
+
+
+def registro_view(request):
+    """Maneja el registro de un nuevo usuario."""
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)  # Inicia sesión automáticamente tras registrarse
+            messages.success(request, f"¡Cuenta creada! Bienvenido, {user.username}.")
+            return redirect('dashboard')
+        else:
+            messages.error(request, "Por favor, corrige los errores del formulario.")
+    else:
+        form = UserCreationForm()
+
+    return render(request, 'inventario/registrar_usuario.html', {'form': form})
+
 
 def login_view(request):
     """Maneja la lógica de inicio de sesión."""

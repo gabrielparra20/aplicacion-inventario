@@ -60,8 +60,16 @@
 
             <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition duration-300 shadow-lg">
                 Ingresar
-            </button>
+            </button>       
         </form>
+
+        <p class="mt-6 text-center text-sm text-gray-600">
+            ¿No tienes cuenta?
+            <a href="{% url 'registro' %}" class="text-blue-600 font-semibold hover:underline">
+                Registrarse
+            </a>
+        </p>
+
     </div>
 </body>
 </html>
